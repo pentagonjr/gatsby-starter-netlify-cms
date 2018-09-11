@@ -2,18 +2,28 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, graphql } from 'gatsby'
 import Layout from '../components/Layout'
+import { withStyles } from '@material-ui/core/styles'
+import withRoot from '../withRoot'
+import Typography from '@material-ui/core/Typography'
 
-export default class IndexPage extends React.Component {
+const styles = theme => ({
+  root: {
+    textAlign: 'center',
+    paddingTop: theme.spacing.unit * 20,
+  },
+});
+
+class IndexPage extends React.Component {
   render() {
-    const { data } = this.props
+    const { data, classes } = this.props
     const { edges: posts } = data.allMarkdownRemark
 
     return (
       <Layout>
         <section className="section">
-          <div className="container">
+          <div className={classes.root}>
             <div className="content">
-              <h1 className="has-text-weight-bold is-size-2">Latest Stories</h1>
+            <Typography variant="subheading" gutterBottom>Latest Stories</Typography>
             </div>
             {posts
               .map(({ node: post }) => (
@@ -52,7 +62,10 @@ IndexPage.propTypes = {
       edges: PropTypes.array,
     }),
   }),
+  classes: PropTypes.object.isRequired,
 }
+
+export default withRoot(withStyles(styles)(IndexPage));
 
 export const pageQuery = graphql`
   query IndexQuery {
